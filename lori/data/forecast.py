@@ -29,7 +29,7 @@ def get_forecast(
 ) -> pd.DataFrame:
     # Define window of past 3 weeks
     start = pd.Timestamp(start).floor("h")
-    _start = start - pd.Timedelta(weeks=20)
+    _start = start - pd.Timedelta(weeks=3)
     _end = start
 
     # Todo: Remove this, it is only for testing
@@ -40,11 +40,12 @@ def get_forecast(
 
     # Load the last 3 weeks of data
     last_3w_ts = self.data.from_logger([column], start=_start, end=_end)[column]
+    #last_3w_ts = last_3w_ts.resample("5min").mean()
 
     if method == "persistence_3weeks":
         persistence_mean, persistence_std = persistence_3_week(start, last_3w_ts)
 
-        last_3w_filtered_ts = apply_kalman_filter(last_3w_ts[_end-pd.Timedelta(days=1):_end])
+        last_3w_filtered_ts = apply_kalman_filter(last_3w_ts[_end-pd.Timedelta(hours=6):_end])
 
         current_filtered = last_3w_filtered_ts.iloc[-1]
 
@@ -52,7 +53,7 @@ def get_forecast(
             current=current_filtered,
             forecast_values=persistence_mean,
             t_half=12,  # Default half-life of 12 hours
-            dt=1  # Default time step of 1 hour
+            dt=60  # Default time step of 1 hour
         )
         plot_model = False
         if plot_model == True:
@@ -76,33 +77,6 @@ def get_forecast(
 
         # resample last_3w_ts to 10 frequency
 
-        last_3w_ts = last_3w_ts.resample("1h").mean()
-
-        persistence_mean, persistence_std = persistence_3_week(start, last_3w_ts)
-
-
-        deterministic = deterministic_forecast_model(
-            current=current_filtered,
-            forecast_values=persistence_mean,
-            t_half=12,  # Default half-life of 12 hours
-            dt=1  # Default time step of 1 hour
-        )
-        if plot_model == True:
-            plt.fill_between(
-                persistence_mean.index,
-                persistence_mean - persistence_std,
-                persistence_mean + persistence_std,
-                color='C2',
-                alpha=0.2,
-                label='Persistence Std Hourly'
-            )
-            plt.plot(deterministic.index, deterministic, label='Deterministic Forecast Hourly', color='red')
-            plt.title('Forecast Comparison')
-            plt.xlabel('Time')
-            plt.ylabel(column)
-            plt.legend()
-            #plt.show()
-            pass
 
         return_df = pd.DataFrame({
             'forecast': deterministic,
@@ -121,7 +95,7 @@ def get_forecast(
 
 
 
-def apply_kalman_filter(series: pd.Series, process_var=1e-5, meas_var=0.1) -> pd.Series:
+def apply_kalman_filter(series: pd.Series, process_var=1e-4, meas_var=0.1) -> pd.Series:
     """
     Apply a basic 1D Kalman Filter to a pandas Series.
 
