@@ -78,10 +78,3 @@ class ForecastUnavailableException(ResourceUnavailableException, ForecastExcepti
     Raise if an accessed forecast can not be found.
 
     """
-
-
-class ForecastingException(ForecastException):
-    """
-    Raise if an error occurred with the forecasting.
-
-    """

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-lori.forecast.connector
-~~~~~~~~~~~~~~~~~~~~~~~
+lori.forecast.forecast
+~~~~~~~~~~~~~~~~~~~~~~
 
 
 """

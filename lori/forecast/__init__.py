@@ -10,7 +10,6 @@ from .core import (  # noqa: F401
     _Forecast,
     ForecastException,
     ForecastUnavailableException,
-    ForecastingException,
 )
 
 from . import access  # noqa: F401

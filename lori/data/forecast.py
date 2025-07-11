@@ -138,7 +138,7 @@ def persistence_3_week(
         return timestamp.weekday() * 24 + timestamp.hour
 
     week_hours = 7 * 24
-    start = last_3w_ts.index[0].floor("h")
+    start = past_ts.index[0].floor("h")
     week_offset = timestamp_to_week(start)
     past_ts.index = pd.to_datetime(past_ts.index).tz_convert(None)
     past_ts.index = (past_ts.index.map(timestamp_to_week) - week_offset) % week_hours
