@@ -42,6 +42,13 @@ from .data import (  # noqa: F401
     Listener,
 )
 
+from . import predictions # noqa: F401
+from .predictions import ( # noqa: F401
+    Prediction,
+    PredictionException,
+    PredictionUnavailableException,
+)
+
 from . import connectors  # noqa: F401
 from .connectors import (  # noqa: F401
     Connector,
