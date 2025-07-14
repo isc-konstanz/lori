@@ -38,7 +38,7 @@ class Channel(Resource):
         "replication",
         "retention",
         "rotate",
-        "forecast"
+        "prediction"
     ]
     TIMESTAMP: str = "timestamp"
 

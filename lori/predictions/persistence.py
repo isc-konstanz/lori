@@ -10,21 +10,48 @@ from __future__ import annotations
 
 import random
 from typing import Optional
+from collections import OrderedDict
 
 import pandas as pd
 import pytz as tz
 from lori import Channel, ConfigurationException, Resource, Resources, Configurations
 from lori.predictions import Prediction, PredictionException, register_prediction_type
 from lori.typing import TimestampType
+from lori.util import parse_freq, to_timedelta
 
 
 # noinspection PyShadowingBuiltins
-@register_prediction_type("dummy", "random")
+@register_prediction_type("persistence")
 class Persistence(Prediction):
-    _data: dict[str, pd.Series] = {}
+    _data: dict[str, pd.DataFrame] = {}
 
     def configure(self, configs: Configurations) -> None:
         super().configure(configs)
+
+        period = configs.get("period", default="1week")
+        period_freq = parse_freq(period)
+        period_time = to_timedelta(period_freq).seconds
+
+        period_count = configs.get_int("period_count", default=3)
+
+        bin_length = configs.get("bin_length", default="1h")
+        bin_length_freq = parse_freq(bin_length)
+        bin_length_time = to_timedelta(bin_length_freq).seconds
+
+        if period_time % bin_length_time != 0:
+            raise ConfigurationException(
+                self,
+                f"Period '{period}' must be a multiple of bin length '{bin_length}'",
+            )
+
+        bin_count = period_time // bin_length_time
+        self._data = OrderedDict((str(i), pd.DataFrame()) for i in range(bin_count))
+
+        pass
+
+
+
+
 
 
 
