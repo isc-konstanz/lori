@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-lori.predictions.dummy
-~~~~~~~~~~~~~~~~~~~~~~
+lori.predictors.dummy
+~~~~~~~~~~~~~~~~~~~~~
 
 
 """
@@ -15,13 +15,13 @@ import pandas as pd
 import pytz as tz
 from lori import Channel, ConfigurationException, Resource, Resources
 from lori.core import Configurations
-from lori.predictions import Prediction, PredictionException, register_prediction_type
+from lori.predictors import Predictor, PredictorException, register_predictor_type
 from lori.typing import TimestampType
 
 
 # noinspection PyShadowingBuiltins
-@register_prediction_type("dummy", "random")
-class DummyPrediction(Prediction):
+@register_predictor_type("dummy", "random")
+class DummyPredictor(Predictor):
     _data: pd.Series
 
     def configure(self, configs: Configurations) -> None:
@@ -38,7 +38,7 @@ class DummyPrediction(Prediction):
             if generator == "random":
                 self._read_random(resource)
             elif generator != "virtual":
-                raise PredictionException(
+                raise PredictorException(
                     self, f"Trying to read dummy channel '{resource.id}' with generator: {generator}"
                 )
         return self._data.to_frame(pd.Timestamp.now(tz.UTC).floor(freq="s")).T

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-lori.predictions.core
+lori.predictorss.core
 ~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -13,15 +13,15 @@ from enum import Enum
 from typing import List
 
 import pandas as pd
-from lori.core import Registrator, ResourceException, Resources, ResourceUnavailableException
+from lori.core import Registrator, ResourceException, Resources, ResourceUnavailableException, Activator
 from lori.data import Channels
 from lori.typing import TimestampType
 
 
 
 
-class _Prediction(Registrator):
-    SECTION: str = "prediction"
+class _Predictor(Registrator):
+    SECTION: str = "predictor"
     INCLUDES: List[str] = []
 
     @property
@@ -41,20 +41,13 @@ class _Prediction(Registrator):
 
 
 
-class PredictionException(ResourceException):
+class PredictorException(ResourceException):
     """
-    Raise if an error occurred accessing the prediction.
+    Raise if an error occurred accessing the predictor.
 
     """
 
     # noinspection PyArgumentList
-    def __init__(self, prediction: _Prediction, *args, **kwargs) -> None:
+    def __init__(self, predictor: _Predictor, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.prediction = prediction
-
-
-class PredictionUnavailableException(ResourceUnavailableException, PredictionException):
-    """
-    Raise if an accessed prediction can not be found.
-
-    """
+        self.predictor = predictor

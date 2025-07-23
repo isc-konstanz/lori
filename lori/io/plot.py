@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 COLORS = [
     "#004F9E",
-    "#FFB800",
+    "#FFB800", # solar-yellow
 ]
 
 INCH = 2.54

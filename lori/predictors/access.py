@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-lori.predictions.access
-~~~~~~~~~~~~~~~~~~~~~~~
+lori.predictors.access
+~~~~~~~~~~~~~~~~~~~~~~
 
 
 """
@@ -10,25 +10,25 @@ from __future__ import annotations
 
 from typing import Any, Collection, Optional, TypeVar
 
-from lori.predictions.core import _Prediction
 from lori.core import Configurations, Directory, Registrator, RegistratorAccess, RegistratorContext, ResourceException
+from lori.predictors.core import _Predictor
 from lori.util import get_context
 
-P = TypeVar("P", bound=_Prediction)
+P = TypeVar("P", bound=_Predictor)
 
 
-class PredictionAccess(RegistratorAccess[P]):
+class PredictorAccess(RegistratorAccess[P]):
     # noinspection PyUnresolvedReferences
     def __init__(self, registrar: Registrator, **kwargs) -> None:
-        context = get_context(registrar, RegistratorContext).context.predictions
+        context = get_context(registrar, RegistratorContext).context.predictors
         super().__init__(context, registrar, "connectors", **kwargs)
 
     # noinspection PyShadowingBuiltins
-    def _set(self, id: str, prediction: P) -> None:
-        if not isinstance(prediction, _Prediction):
-            raise ResourceException(f"Invalid connector type: {type(prediction)}")
+    def _set(self, id: str, predictor: P) -> None:
+        if not isinstance(predictor, _Predictor):
+            raise ResourceException(f"Invalid connector type: {type(predictor)}")
 
-        super()._set(id, prediction)
+        super()._set(id, predictor)
 
     def load(
         self,
@@ -50,6 +50,6 @@ class PredictionAccess(RegistratorAccess[P]):
             configs_file=configs_file,
             configs_dir=configs_dir,
             configure=configure,
-            includes=_Prediction.INCLUDES,
+            includes=_Predictor.INCLUDES,
             **kwargs,
         )

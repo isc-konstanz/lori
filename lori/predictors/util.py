@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-lori.predictions.util
-~~~~~~~~~~~~~~~~~~~~~
+lori.predictors.util
+~~~~~~~~~~~~~~~~~~~~
 
 
 """
@@ -10,13 +10,6 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-
-# FIXME: Remove this once Python >= 3.9 is a requirement
-try:
-    from typing import Literal
-
-except ImportError:
-    from typing_extensions import Literal
 
 
 def prediction_correction(

@@ -42,13 +42,6 @@ from .data import (  # noqa: F401
     Listener,
 )
 
-from . import predictions # noqa: F401
-from .predictions import ( # noqa: F401
-    Prediction,
-    PredictionException,
-    PredictionUnavailableException,
-)
-
 from . import connectors  # noqa: F401
 from .connectors import (  # noqa: F401
     Connector,
@@ -58,6 +51,12 @@ from .connectors import (  # noqa: F401
     DatabaseException,
     DatabaseUnavailableException,
     Databases,
+)
+
+from . import predictors  # noqa: F401
+from .predictors import (  # noqa: F401
+    Predictor,
+    PredictorException,
 )
 
 from . import components  # noqa: F401

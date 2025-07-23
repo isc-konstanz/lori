@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-lori.prediction.context
+lori.predictors.context
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -10,16 +10,16 @@ from __future__ import annotations
 
 from typing import Any, Callable, Collection, Optional, Type, TypeVar
 
-from lori.predictions.core import _Prediction
 from lori.core import Configurations, Context, Registrator, RegistratorContext, Registry
+from lori.predictors.core import _Predictor
 
-P = TypeVar("P", bound=_Prediction)
+P = TypeVar("P", bound=_Predictor)
 
-registry = Registry[_Prediction]()
+registry = Registry[_Predictor]()
 
 
 # noinspection PyShadowingBuiltins
-def register_prediction_type(
+def register_predictor_type(
     type: str,
     *alias: str,
     factory: Callable[[Context | Registrator, Optional[Configurations]], P] = None,
@@ -33,9 +33,9 @@ def register_prediction_type(
     return _register
 
 
-class PredictionContext(RegistratorContext[P]):
+class PredictorContext(RegistratorContext[P]):
     def __init__(self, context: Context, **kwargs) -> None:
-        super().__init__(context, "predictions", **kwargs)
+        super().__init__(context, "predictor", **kwargs)
 
     @property
     def _registry(self) -> Registry[P]:
@@ -44,4 +44,4 @@ class PredictionContext(RegistratorContext[P]):
     def load(self, configs: Optional[Configurations] = None, **kwargs: Any) -> Collection[P]:
         if configs is None:
             configs = self._get_registrator_section()
-        return self._load(self, configs, includes=_Prediction.INCLUDES, **kwargs)
+        return self._load(self, configs, includes=_Predictor.INCLUDES, **kwargs)

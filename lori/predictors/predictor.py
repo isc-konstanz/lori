@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-lori.predictions.prediction
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+lori.predictors.prediction
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 """
@@ -16,17 +16,16 @@ from threading import Lock
 from typing import Any, Dict, Optional
 
 import pandas as pd
-import pytz as tz
-from lori.predictions.core import PredictionException, _Prediction
 from lori.core import Context, Registrator, Resource, ResourceException, Resources
 from lori.core.configs import ConfigurationException, Configurations
 from lori.core.configs.configurator import Configurator, ConfiguratorMeta
 from lori.data.channels import Channel, Channels, ChannelState
 from lori.data.validation import validate_index
+from lori.predictors.core import PredictorException, _Predictor
 from lori.typing import TimestampType
 
 
-class PredictionMeta(ConfiguratorMeta):
+class PredictorMeta(ConfiguratorMeta):
     # noinspection PyProtectedMember
     def __call__(cls, *args, **kwargs):
         prediction = super().__call__(*args, **kwargs)
@@ -35,7 +34,7 @@ class PredictionMeta(ConfiguratorMeta):
         return prediction
 
 
-class Prediction(_Prediction, metaclass=PredictionMeta):
+class Predictor(_Predictor, metaclass=PredictorMeta):
 
     __resources: Resources
 
@@ -48,7 +47,7 @@ class Prediction(_Prediction, metaclass=PredictionMeta):
         super().__init__(context=context, configs=configs, **kwargs)
         self.__resources = Resources()
 
-    def __enter__(self) -> Prediction:
+    def __enter__(self) -> Predictor:
         return self
 
     # noinspection PyShadowingBuiltins
